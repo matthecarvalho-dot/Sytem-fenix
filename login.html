@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sistema de Gestão</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            border-top: 4px solid #ff6b00;
+        }
+
+        .login-box h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #0056b3;
+        }
+
+        .login-box h2 i {
+            color: #ff6b00;
+            margin-right: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #ff6b00;
+            outline: none;
+            box-shadow: 0 0 5px rgba(255, 107, 0, 0.3);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #0056b3 0%, #000000 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 86, 179, 0.3);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register-link a {
+            color: #ff6b00;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .register-link a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: #ff6b00;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+            border-left: 3px solid #ff6b00;
+        }
+
+        .info-box p {
+            color: #666;
+            font-size: 12px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <h2><i class="fas fa-chart-line"></i> Sistema de Gestão</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Usuário:</label>
+                    <input type="text" id="loginUser" required placeholder="Digite seu usuário">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Senha:</label>
+                    <input type="password" id="loginPassword" required placeholder="Digite sua senha">
+                </div>
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
+                </button>
+                <div id="errorMessage" class="error-message"></div>
+            </form>
+            <p class="register-link">
+                Não tem conta? <a href="#" onclick="showRegister()">Cadastre-se gratuitamente</a>
+            </p>
+            <div class="info-box">
+                <p><i class="fas fa-info-circle"></i> Credenciais padrão:</p>
+                <p><strong>Usuário:</strong> admin | <strong>Senha:</strong> admin123</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sistema de autenticação simples com localStorage
+        let users = [];
+
+        // Carregar usuários
+        function loadUsers() {
+            const stored = localStorage.getItem('users');
+            if (stored) {
+                users = JSON.parse(stored);
+            } else {
+                // Usuário padrão
+                users = [
+                    {
+                        id: '1',
+                        username: 'admin',
+                        password: 'admin123',
+                        name: 'Administrador',
+                        email: 'admin@email.com'
+                    }
+                ];
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+        }
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('loginUser').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            loadUsers();
+            
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify({
+                    id: user.id,
+                    username: user.username,
+                    name: user.name,
+                    email: user.email
+                }));
+                window.location.href = 'index.html';
+            } else {
+                document.getElementById('errorMessage').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Usuário ou senha inválidos!';
+            }
+        });
+
+        // Cadastro de novo usuário
+        window.showRegister = () => {
+            const username = prompt('Digite um nome de usuário:');
+            if (!username) return;
+            
+            const password = prompt('Digite uma senha:');
+            if (!password) return;
+            
+            const name = prompt('Digite seu nome completo:');
+            if (!name) return;
+            
+            const email = prompt('Digite seu email:');
+            if (!email) return;
+            
+            loadUsers();
+            
+            // Verificar se usuário já existe
+            if (users.find(u => u.username === username)) {
+                alert('❌ Usuário já existe!');
+                return;
+            }
+            
+            const newUser = {
+                id: Date.now().toString(),
+                username: username,
+                password: password,
+                name: name,
+                email: email
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            alert('✅ Usuário cadastrado com sucesso! Agora você pode fazer login.');
+        };
+    </script>
+</body>
+</html>
