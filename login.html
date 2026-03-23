@@ -19,49 +19,118 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Fundo animado */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .bg-animation div {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 86, 179, 0.1);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
         }
 
         .login-container {
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
             padding: 20px;
+            position: relative;
+            z-index: 1;
         }
 
         .login-box {
             background: white;
             padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            border-top: 4px solid #ff6b00;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-top: 5px solid #ff6b00;
+            animation: fadeInUp 0.6s ease-out;
         }
 
-        .login-box h2 {
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
             text-align: center;
             margin-bottom: 30px;
-            color: #0056b3;
         }
 
-        .login-box h2 i {
+        .logo i {
+            font-size: 60px;
             color: #ff6b00;
-            margin-right: 10px;
+        }
+
+        .logo h2 {
+            color: #0056b3;
+            margin-top: 10px;
+            font-size: 24px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: bold;
             color: #000000;
         }
 
+        .input-group {
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ff6b00;
+        }
+
         .form-group input {
             width: 100%;
-            padding: 12px;
+            padding: 12px 12px 12px 40px;
             border: 2px solid #e0e0e0;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 14px;
             transition: all 0.3s;
         }
@@ -77,17 +146,21 @@
             color: white;
             border: none;
             padding: 12px;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
             width: 100%;
             transition: all 0.3s;
             font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 86, 179, 0.3);
+            box-shadow: 0 5px 20px rgba(0, 86, 179, 0.4);
         }
 
         .register-link {
@@ -99,6 +172,7 @@
             color: #ff6b00;
             text-decoration: none;
             font-weight: bold;
+            transition: all 0.3s;
         }
 
         .register-link a:hover {
@@ -109,16 +183,19 @@
         .error-message {
             color: #ff6b00;
             text-align: center;
-            margin-top: 10px;
+            margin-top: 15px;
             font-size: 14px;
             font-weight: bold;
+            padding: 10px;
+            background: #fff3e0;
+            border-radius: 5px;
         }
 
         .info-box {
             background: #f8f9fa;
             padding: 15px;
-            border-radius: 5px;
-            margin-top: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
             text-align: center;
             border-left: 3px solid #ff6b00;
         }
@@ -128,39 +205,77 @@
             font-size: 12px;
             margin: 5px 0;
         }
+
+        .info-box strong {
+            color: #ff6b00;
+        }
     </style>
 </head>
 <body>
+    <div class="bg-animation" id="bgAnimation"></div>
+    
     <div class="login-container">
         <div class="login-box">
-            <h2><i class="fas fa-chart-line"></i> Sistema de Gestão</h2>
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <h2>Sistema de Gestão</h2>
+            </div>
+            
             <form id="loginForm">
                 <div class="form-group">
-                    <label><i class="fas fa-user"></i> Usuário:</label>
-                    <input type="text" id="loginUser" required placeholder="Digite seu usuário">
+                    <label><i class="fas fa-user"></i> Usuário</label>
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="loginUser" required placeholder="Digite seu usuário">
+                    </div>
                 </div>
+                
                 <div class="form-group">
-                    <label><i class="fas fa-lock"></i> Senha:</label>
-                    <input type="password" id="loginPassword" required placeholder="Digite sua senha">
+                    <label><i class="fas fa-lock"></i> Senha</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="loginPassword" required placeholder="Digite sua senha">
+                    </div>
                 </div>
+                
                 <button type="submit" class="btn-submit">
                     <i class="fas fa-sign-in-alt"></i> Entrar
                 </button>
-                <div id="errorMessage" class="error-message"></div>
+                
+                <div id="errorMessage" class="error-message" style="display: none;"></div>
             </form>
+            
             <p class="register-link">
                 Não tem conta? <a href="#" onclick="showRegister()">Cadastre-se gratuitamente</a>
             </p>
+            
             <div class="info-box">
-                <p><i class="fas fa-info-circle"></i> Credenciais padrão:</p>
+                <p><i class="fas fa-info-circle"></i> Credenciais de teste:</p>
                 <p><strong>Usuário:</strong> admin | <strong>Senha:</strong> admin123</p>
+                <p style="font-size: 11px; margin-top: 8px;">Sistema desenvolvido para gestão de clientes</p>
             </div>
         </div>
     </div>
 
     <script>
-        // Sistema de autenticação simples com localStorage
+        // Sistema de autenticação
         let users = [];
+
+        // Criar bolhas animadas
+        function createBubbles() {
+            const bgAnimation = document.getElementById('bgAnimation');
+            for (let i = 0; i < 30; i++) {
+                const bubble = document.createElement('div');
+                const size = Math.random() * 80 + 20;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.animationDelay = Math.random() * 20 + 's';
+                bubble.style.animationDuration = Math.random() * 15 + 10 + 's';
+                bubble.style.background = `rgba(255, 107, 0, ${Math.random() * 0.1})`;
+                bgAnimation.appendChild(bubble);
+            }
+        }
 
         // Carregar usuários
         function loadUsers() {
@@ -168,14 +283,14 @@
             if (stored) {
                 users = JSON.parse(stored);
             } else {
-                // Usuário padrão
                 users = [
                     {
                         id: '1',
                         username: 'admin',
                         password: 'admin123',
                         name: 'Administrador',
-                        email: 'admin@email.com'
+                        email: 'admin@email.com',
+                        createdAt: new Date().toISOString()
                     }
                 ];
                 localStorage.setItem('users', JSON.stringify(users));
@@ -198,31 +313,50 @@
                     id: user.id,
                     username: user.username,
                     name: user.name,
-                    email: user.email
+                    email: user.email,
+                    loginTime: new Date().toISOString()
                 }));
-                window.location.href = 'index.html';
+                
+                // Animação de sucesso
+                const btn = document.querySelector('.btn-submit');
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 500);
             } else {
-                document.getElementById('errorMessage').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Usuário ou senha inválidos!';
+                const errorDiv = document.getElementById('errorMessage');
+                errorDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Usuário ou senha inválidos!';
+                errorDiv.style.display = 'block';
+                
+                setTimeout(() => {
+                    errorDiv.style.display = 'none';
+                }, 3000);
             }
         });
 
-        // Cadastro de novo usuário
+        // Cadastro
         window.showRegister = () => {
             const username = prompt('Digite um nome de usuário:');
-            if (!username) return;
+            if (!username || username.trim() === '') return;
             
-            const password = prompt('Digite uma senha:');
-            if (!password) return;
+            const password = prompt('Digite uma senha: (mínimo 4 caracteres)');
+            if (!password || password.length < 4) {
+                alert('Senha deve ter pelo menos 4 caracteres!');
+                return;
+            }
             
             const name = prompt('Digite seu nome completo:');
             if (!name) return;
             
             const email = prompt('Digite seu email:');
-            if (!email) return;
+            if (!email || !email.includes('@')) {
+                alert('Email inválido!');
+                return;
+            }
             
             loadUsers();
             
-            // Verificar se usuário já existe
             if (users.find(u => u.username === username)) {
                 alert('❌ Usuário já existe!');
                 return;
@@ -233,13 +367,24 @@
                 username: username,
                 password: password,
                 name: name,
-                email: email
+                email: email,
+                createdAt: new Date().toISOString()
             };
             
             users.push(newUser);
             localStorage.setItem('users', JSON.stringify(users));
             alert('✅ Usuário cadastrado com sucesso! Agora você pode fazer login.');
         };
+
+        // Inicializar
+        createBubbles();
+        
+        // Adicionar efeito de enter
+        document.getElementById('loginPassword').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+        });
     </script>
 </body>
 </html>
